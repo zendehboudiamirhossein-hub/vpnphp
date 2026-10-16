@@ -19,6 +19,7 @@ if [ -z "$(ls -A "$DATA_DIR/uploads-ads" 2>/dev/null)" ]; then
 fi
 
 # Replace the in-image copies with symlinks into the volume.
+mkdir -p "$APP_DIR/uploads"
 rm -rf "$APP_DIR/storage" "$APP_DIR/uploads/ads"
 ln -sfn "$DATA_DIR/storage" "$APP_DIR/storage"
 ln -sfn "$DATA_DIR/uploads-ads" "$APP_DIR/uploads/ads"
