@@ -31,6 +31,10 @@ ln -sfn "$DATA_DIR/config.php" "$APP_DIR/config.php"
 
 chown -R www-data:www-data "$DATA_DIR" "$APP_DIR/config.php" 2>/dev/null || true
 
+# Safety net: make sure only ONE Apache MPM (prefork) is enabled.
+rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.*
+a2enmod mpm_prefork >/dev/null 2>&1 || true
+
 # Railway injects $PORT; Apache must listen on it instead of the default 80.
 PORT="${PORT:-8080}"
 sed -ri "s/Listen 80/Listen ${PORT}/" /etc/apache2/ports.conf
