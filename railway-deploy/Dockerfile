@@ -4,6 +4,11 @@ FROM php:8.2-apache
 RUN docker-php-ext-install pdo pdo_mysql mysqli \
     && a2enmod rewrite headers
 
+# Fix "AH00534: More than one MPM loaded": keep exactly one MPM (prefork,
+# required by mod_php).
+RUN rm -f /etc/apache2/mods-enabled/mpm_*.load /etc/apache2/mods-enabled/mpm_*.conf \
+    && a2enmod mpm_prefork
+
 # App code lives at /var/www/html (Apache default docroot)
 COPY . /var/www/html/
 
